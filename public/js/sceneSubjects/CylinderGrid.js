@@ -9,10 +9,10 @@ const CylinderGrid = function(scene, eventBus, gui){
     this.group = new THREE.Group();
 
     this.cylinders  = [];
-    this.resolution = 10;
-    this.scale      = 1.5;
-    this.gridspace  = 2.0;
-    this.wireframe  = false;
+    this.resolution = 5;
+    this.scale      = 2;
+    this.gridspace  = 0;
+    this.wireframe  = true;
 
     this.generateGrid();
 
@@ -29,7 +29,7 @@ const CylinderGrid = function(scene, eventBus, gui){
   this.setupGUI = () => {
     this.gui = gui.addFolder('Cylinder Grid');
 
-    this.gui.add(this,'scale',0,10).onChange(()=>{
+    this.gui.add(this,'scale',0,100).onChange(()=>{
       this.group.scale.set(this.scale,this.scale,this.scale);
     });
 
