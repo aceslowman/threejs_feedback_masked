@@ -1,31 +1,29 @@
 import * as THREE from "three";
-import asStandardTemplate from "./templates/asStandardTemplate";
-import asFeedbackTemplate from "./templates/asFeedbackTemplate";
-import asCapture from "./utils/asCapture";
-import asDebug from "./utils/asDebug";
 
-import CylinderGrid from "./sceneSubjects/CylinderGrid";
+import StandardManager from "./system/StandardManager";
+import FeedbackManager from "./system/FeedbackManager";
+import Capture from "./utilities/Capture";
+import Debug from "./utilities/Debug";
+import Box from "./entities/Box";
+import Capsule from "./entities/Capsule";
+import Camera from "./entities/Camera";
+import PointLight from "./entities/PointLight";
 
-let template, debug, capturer, controls, grid;
+let manager, debug, capturer, box, camera, capsule, light;
 
 const setup = () => {
-  template = new asFeedbackTemplate({
-    camera: {
-      zoom: 3,
-      ortho: false,
-      orbitControls: true,
-      focalLength: 6
-    }
+  manager = new FeedbackManager();
+
+  // box = new Box(manager);
+  capsule = new Capsule(manager);
+  light = new PointLight(manager);
+
+  debug = new Debug(manager, {
+    stats: true,
+    grid: false
   });
 
-  grid = new CylinderGrid(template);
-  template.addSubject(grid);
-
-  debug = new asDebug(template, {
-    stats: true
-  });
-
-  capturer = new asCapture(template, {
+  capturer = new Capture(manager, {
     verbose: false,
     display: true,
     framerate: 100,
@@ -38,16 +36,16 @@ const render = () => {
   requestAnimationFrame(render);
 
   debug.stats.begin();
-  template.update();
+  manager.update();
   debug.stats.end();
 
-  capturer.capture( template.canvas );
+  capturer.capture( manager.canvas );
 }
 
 const bindEventListeners = () => {
   window.addEventListener(
     'resize',
-    template.onWindowResize.bind(template),
+    manager.onWindowResize.bind(manager),
     false
   );
 }

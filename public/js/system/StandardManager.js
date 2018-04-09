@@ -1,10 +1,6 @@
 import * as THREE from "three";
-
-/* ENTITIES */
-import asCamera from "../utils/asCamera";
-
-/* UTILITY */
-import asEventBus from "../utils/asEventBus";
+import Camera from "../entities/Camera";
+import EventBus from "../utilities/EventBus";
 import dat from "dat.gui";
 
 /*
@@ -18,69 +14,69 @@ import dat from "dat.gui";
   clock
   scene
   camera
+    default camera is used, unless separate camera is passed using setCamera()
   renderer
-  subjects
+  entities
 */
 
-export default class asStandardTemplate{
+export default class asStandardManager{
   constructor({
     scene = {
-      background: 0x000000
-    },
-    camera = {
-      zoom: 1,
-      ortho: false,
-      orbitControls: true,
-      focalLength: 19.588356831048795
+      background:  	0x999999
     },
     renderer = {
       antialias: true,
       alpha: true
     }
   }={}){
-    this.subjects = [];
     this.width  = window.innerWidth;
     this.height = window.innerHeight;
 
+    this.entities = [];
+
     this.gui = new dat.GUI();
-    this.eventBus = new asEventBus();
+    this.eventBus = new EventBus();
     this.clock = new THREE.Clock();
     this.scene = new THREE.Scene();
-
     this.scene.background = new THREE.Color( scene.background );
     this.renderer = new THREE.WebGLRenderer( renderer );
     this.renderer.setSize(this.width, this.height);
-    this.camera = new asCamera(this, camera);
+    this.camera = new Camera(this);
 
     document.body.appendChild( this.renderer.domElement );
   }
 
-  updateSubjects(){
-    for(let i=0; i < this.subjects.length; i++){
-      this.subjects[i].update();
+  setCamera(camera){
+    this.camera = camera;
+    this.camera.updateProjectionMatrix();
+  }
+
+  updateEntities(){
+    for(let i=0; i < this.entities.length; i++){
+      this.entities[i].update();
     }
   }
 
   update(){
-    this.updateSubjects();
-    this.renderer.render(this.scene, this.camera.cam);
+    this.updateEntities();
+    this.renderer.render(this.scene, this.camera.getCamera());
   }
 
-  addSubject(subject){
-    this.subjects.push(subject);
-  }
-
-  get canvas(){
-    return this.renderer.domElement;
+  addEntity(entity){
+    this.entities.push(entity);
   }
 
   onWindowResize(){
     this.width  = window.innerWidth;
     this.height = window.innerHeight;
 
-    this.camera.cam.aspect = this.width / this.height;
-    this.camera.cam.updateProjectionMatrix();
+    this.camera.getCamera().aspect = this.width / this.height;
+    this.camera.getCamera().updateProjectionMatrix();
 
     this.renderer.setSize(this.width, this.height);
+  }
+
+  get canvas(){
+    return this.renderer.domElement;
   }
 }

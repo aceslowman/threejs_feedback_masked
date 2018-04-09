@@ -1,8 +1,8 @@
 import * as THREE from "three";
-import asStandardTemplate from "./asStandardTemplate";
+import StandardManager from "./StandardManager";
 import * as feedback from '../shaders/feedback';
 
-export default class asFeedbackManager extends asStandardTemplate{
+export default class FeedbackManager extends StandardManager{
   constructor(options){
     super(options);
 
@@ -99,12 +99,12 @@ export default class asFeedbackManager extends asStandardTemplate{
   }
 
   update(){
-    this.updateSubjects();
+    this.updateEntities();
 
     this.camera.update();
 
     //render the main scene to the main target
-    this.renderer.render(this.scene, this.camera.cam, this.mainTarget);
+    this.renderer.render(this.scene, this.camera.getCamera(), this.mainTarget);
     //render the feedback to the output target
     this.renderer.render(this.feedbackScene, this.orthoCamera, this.outputTarget);
 
