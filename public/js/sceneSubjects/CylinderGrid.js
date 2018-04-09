@@ -13,13 +13,17 @@ export default class CylinderGrid{
     this.scale      = 0.4;
     this.gridspace  = 2.8;
     this.wireframe  = false;
+    this.modulation = {
+      speed: 0.1,
+      depth: 2
+    }
 
     this.group = new THREE.Group();
     this.cylinders  = [];
 
     this.generateGrid();
 
-    this.group.scale.set(this.scale,this.scale,this.scale);
+    this.group.scale.set(this.scale,this.scale,0.1);
 
     this.template.scene.add(this.group);
     this.setupGUI();
@@ -75,32 +79,29 @@ export default class CylinderGrid{
       }
     });
 
+    this.gui.add(this.modulation,'speed');
+    this.gui.add(this.modulation,'depth');
+
     this.gui.add(this,'wireframe').onChange((value)=>{
       for(let i = 0; i < this.cylinders.length; i++){
         this.cylinders[i].material.wireframe = value;
       }
     });
 
-    this.gui.add(this.group.rotation,'x',-Math.PI*2,Math.PI*2).step(0.01);
-    this.gui.add(this.group.rotation,'y',-Math.PI*2,Math.PI*2).step(0.01);
-    this.gui.add(this.group.rotation,'z',-Math.PI*2,Math.PI*2).step(0.01);
-
     this.gui.open();
   }
 
   update(){
-    // let rot = (Math.PI/2) * Math.sin(this.clock.getElapsedTime());
-    // this.group.rotation.z = rot;
-    let mod_speed = 2;
-    let mod_depth = 0.1;
+    let rot = (Math.PI/2) * Math.sin(this.clock.getElapsedTime());
+    this.group.rotation.z = rot;
 
     for(let x = 0, i = 0; x < this.resolution; x++){
       for(let y = 0; y < this.resolution; y++, i++){
-        this.cylinders[i].mesh.position.z = Math.sin(this.clock.getElapsedTime()*mod_speed+(x*y)) * mod_depth;
+        this.cylinders[i].mesh.position.z = Math.sin(this.clock.getElapsedTime()*this.modulation.speed+(x*y)) * this.modulation.depth;
       }
     }
 
-    let z = Math.sin(this.clock.getElapsedTime()*mod_speed) * mod_depth;
+    let z = Math.sin(this.clock.getElapsedTime()*this.modulation.speed) * this.modulation.depth;
     this.group.position.z = z;
   }
 }

@@ -13,7 +13,8 @@ const setup = () => {
     camera: {
       zoom: 3,
       ortho: false,
-      orbitControls: true
+      orbitControls: true,
+      focalLength: 6
     }
   });
 
