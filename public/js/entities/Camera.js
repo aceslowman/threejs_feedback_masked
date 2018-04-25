@@ -19,8 +19,9 @@ export default class Camera extends StandardEntity{
       1000          // far
     );
 
-    this.zoom        = 1;
-    this.focalLength = this.camera.getFocalLength();
+    this.zoom        = 7;
+    // this.focalLength = this.camera.getFocalLength();
+    this.focalLength = 9;
 
     this.camera.position.z = 2;
     this.camera.zoom = this.zoom;

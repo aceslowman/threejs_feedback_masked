@@ -4,18 +4,17 @@ import StandardManager from "./system/StandardManager";
 import FeedbackManager from "./system/FeedbackManager";
 import Capture from "./utilities/Capture";
 import Debug from "./utilities/Debug";
-import Box from "./entities/Box";
-import Capsule from "./entities/Capsule";
+import CapsuleGrid from "./entities/CapsuleGrid";
 import Camera from "./entities/Camera";
 import PointLight from "./entities/PointLight";
 
-let manager, debug, capturer, box, camera, capsule, light;
+let manager, debug, capturer, camera, grid, light;
 
 const setup = () => {
   manager = new FeedbackManager();
 
-  // box = new Box(manager);
-  capsule = new Capsule(manager);
+  grid = new CapsuleGrid(manager);
+
   light = new PointLight(manager);
 
   debug = new Debug(manager, {

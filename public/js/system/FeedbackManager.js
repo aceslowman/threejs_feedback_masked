@@ -61,7 +61,7 @@ export default class FeedbackManager extends StandardManager{
       this.gui.feedback = this.gui.addFolder('Feedback Shader');
 
       this.gui.feedback.add(this.feedbackUniforms.feedback,'value',0,1).name('Amount');
-      this.gui.feedback.add(this.feedbackUniforms.scale,'value',0,2).name('Scale');
+      this.gui.feedback.add(this.feedbackUniforms.scale,'value',0.8,1.2).name('Scale').step(0.001);
       this.gui.feedback.open();
 
       const geometry = new THREE.PlaneBufferGeometry( 2., 2.);
